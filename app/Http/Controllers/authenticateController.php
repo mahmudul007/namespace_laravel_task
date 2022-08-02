@@ -30,21 +30,22 @@ class authenticateController extends Controller
     //login 
     public function Login (Request $req){
         $error ="User name password not matched";
-        
-        $user = Authenticates::where('email',$req->email)->where('password',$req->password)->first();
+        // Hash::check('plain-text', $hashedPassword)
+        $user = Authenticates::where('email',$req->email)
+        ->where ( Hash::check('password',$req->password))->first();
         if($user){
             $api_token = Str::random(64);
             $token = new Token();
             $token->userid = $user->id;
             $token->token = $api_token;
+             $token->created_at = new DateTime();
+           
+          
             $token->save();
           
             return response()->json([
                 'token'=>$token,
                 'user'=>$user
-
-
-
             ],200
         
         );
