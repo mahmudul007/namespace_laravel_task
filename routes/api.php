@@ -25,4 +25,4 @@ Route::post('/short',[TestController::class,'linkStore']);
 Route::get('/shortlInk/{shortlink}',[TestController::class,'shortlInk']);
 Route::get('/all',[TestController::class,'all']);
 Route::post ('/register',[authenticateController::class,'Register']);
-Route::post ('/Login',[authenticateController::class,'Login']);
+Route::post ('/login',[authenticateController::class,'Login']);
