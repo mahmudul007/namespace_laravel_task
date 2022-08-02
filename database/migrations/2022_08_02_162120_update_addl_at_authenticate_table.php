@@ -13,10 +13,8 @@ class UpdateAddlAtAuthenticateTable extends Migration
      */
     public function up()
     {
-        //
-        Schema::table('Authenticates', function (Blueprint $table) {
-     $table->string('username')->primary();
-});
+        Schema::drop('Authenticates');
+        
     }
 
     /**
@@ -26,10 +24,8 @@ class UpdateAddlAtAuthenticateTable extends Migration
      */
     public function down()
     {
-        Schema::table('Authenticates', function (Blueprint $table) {
-        $table->dropColumn('username');
-        });
-      
+       
+       Schema::drop('Authenticates');
     
     }
 }

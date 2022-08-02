@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAuthenticateTable extends Migration
+class MakeAuthenticatesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateAuthenticateTable extends Migration
      */
     public function up()
     {
-        Schema::create('authenticates', function (Blueprint $table) {
+       Schema::create('authenticates', function (Blueprint $table) {
             $table->increments('id');
             $table->string ('name');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->string('password');
             $table->timestamps();
         });
@@ -27,9 +27,8 @@ class CreateAuthenticateTable extends Migration
      *
      * @return void
      */
-    
     public function down()
     {
-        Schema::dropIfExists('authenticates');
+        Schema::drop('Authenticates');
     }
 }

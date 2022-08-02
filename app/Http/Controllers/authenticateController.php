@@ -22,7 +22,9 @@ class authenticateController extends Controller
        $var->save();
  return response()->json([
                 'var'=>  $var,
-            ],200); 
+            ],200)
+            
+            ; 
 
     }
     //login 
