@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Authenticates;
+use Illuminate\Support\Str;
 
+use App\Models\Authenticates;
+use App\Models\Tokenauth;
+use DateTime;
 
 class authenticateController extends Controller
 {
@@ -16,9 +19,7 @@ class authenticateController extends Controller
         $var = new Authenticates();
         $var ->name= $req->name;
         $var->email=$req->email;
-        $var ->password=Hash::make($req->password,[
-             'rounds' => 6,
-        ]);
+        $var ->password=$req->password;
        $var->save();
  return response()->json([
                 'var'=>  $var,
@@ -30,17 +31,15 @@ class authenticateController extends Controller
     //login 
     public function Login (Request $req){
         $error ="User name password not matched";
-        // Hash::check('plain-text', $hashedPassword)
+       
         $user = Authenticates::where('email',$req->email)
-        ->where ( Hash::check('password',$req->password))->first();
+        ->where ('password',$req->password)->first();
         if($user){
             $api_token = Str::random(64);
-            $token = new Token();
+            $token = new Tokenauth();
             $token->userid = $user->id;
             $token->token = $api_token;
-             $token->created_at = new DateTime();
-           
-          
+            $token->created_at = new DateTime();        
             $token->save();
           
             return response()->json([
