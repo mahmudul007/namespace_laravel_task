@@ -20,9 +20,19 @@ use  App\Http\Controllers\authenticateController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('/test',[TestController::class,'test']);
+
 Route::post('/short',[TestController::class,'linkStore']);
 Route::get('/shortlInk/{shortlink}',[TestController::class,'shortlInk']);
 Route::get('/all',[TestController::class,'all']);
+
+//authentication
 Route::post ('/register',[authenticateController::class,'Register']);
 Route::post ('/login',[authenticateController::class,'Login']);
+Route::put('/logout',[authenticateController::class,'Logout']);
+
+//testing route
+
+Route::get('/ip',[authenticateController::class,'Ip'])->middleware ('throttle:ip_address');
+
+
+Route::get('/test',[TestController::class,'test']);

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RenameAuthenticateTable extends Migration
+class RenameTableMigrat extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class RenameAuthenticateTable extends Migration
      */
     public function up()
     {
-        Schema::rename('authenticate', 'authenticates');
+     Schema::rename('authenticate', 'authenticates');
     }
 
     /**

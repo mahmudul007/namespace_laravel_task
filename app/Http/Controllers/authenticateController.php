@@ -17,9 +17,10 @@ class authenticateController extends Controller
        public function Register (Request $req){
 
         $var = new Authenticates();
+        
         $var ->name= $req->name;
         $var->email=$req->email;
-        $var ->password=$req->password;
+        $var ->password= Hash::make($req->password);
        $var->save();
  return response()->json([
                 'var'=>  $var,
@@ -30,26 +31,87 @@ class authenticateController extends Controller
     }
     //login 
     public function Login (Request $req){
-        $error ="User name password not matched";
-       
-        $user = Authenticates::where('email',$req->email)
-        ->where ('password',$req->password)->first();
+       try{
+       $email= $req->email;
+       $password=$req->password;
+       $user = Authenticates::where('email',$email)->first();
+        
         if($user){
-            $api_token = Str::random(64);
+            if(Hash::check($req->password, $user->password))
+          { 
+             $api_token = Str::random(64);
             $token = new Tokenauth();
             $token->userid = $user->id;
             $token->token = $api_token;
-            $token->created_at = new DateTime();        
+            $token->created_at = new DateTime(); 
+            $token->ip=$req -> getClientIp();    
             $token->save();
           
             return response()->json([
-                'token'=>$token,
+                'message' => 'User login successfully',
+                'authtoken'=>$token,
                 'user'=>$user
             ],200
         
-        );
+        );}
             
         }
+       }
+ catch(\Exception $exception){
+ 
+           return response([
+                'message'=>$exception->getMessage()
+            ],400);
+            }      
+      return response([
+            'message'=>"Login Failed"
+        ],401);   
+    }
+
+    //logout from database by update creating updating
+    public function Logout (Request $request ){
+        try{
+              $token = Tokenauth::where('token', $request->header('token'))->first();
+              $token->expired_at =  new DateTime();
+        
+          if($token->save()){
+            return response()->json(
+                [
+                    'message'=>'logout successfully',
+                ],
+                200
+            );           
+          }
+        }
+        catch (\Exception $exception){
+               return response([
+                'message'=>$exception->getMessage()
+            ],400);
+            
+        }
+      
+    }
+
+
+
+    public function Ip (Request $req){
+        try{
+       $address= $req->ip();
+        $two = $req -> getClientIp();
+        return response()->json([
+                'address'=>  $address,
+            ],200); 
+        }
+  
+            catch(\Exception $exception){
+           return response([
+                'message'=>$exception->getMessage()
+            ],400);
+            }
+        
+        
+     
+
     }
     
 }

@@ -14,6 +14,8 @@ class CreateTokenauthsTable extends Migration
     public function up()
     {
         Schema::create('tokenauths', function (Blueprint $table) {
+                 $table->dateTime('expired_at')->nullable();
+                $table->string ('ip');
              $table->increments('id');
             $table->string('userid');
             $table->string('token');
